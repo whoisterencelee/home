@@ -69,8 +69,8 @@ URxvt*fading: 60
 
 ! Select the fonts to be used. This is a comma separated list of font names that are checked
 ! URxvt*font:  WenQuanYi Micro Hei Mono Light
-!URxvt*font: xft:WenQuanYi Micro Hei Mono Light:pixelsize=14
-URxvt*font: xft:DejaVu Sans Mono:pixelsize=12
+! URxvt*font: xft:WenQuanYi Micro Hei Mono Light:pixelsize=14
+URxvt*font: xft:DejaVu Sans Mono:pixelsize=12,xft:WenQuanYi Micro Hei Mono Light:pixelsize=12
 
 ! URxvt*boldFont: fontlist
 
