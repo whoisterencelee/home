@@ -8,6 +8,7 @@
 set -o vi
 
 alias ls='ls --color=auto'
+alias l='ls --color=auto -alrt'
 
 export PS1='\
 \[\e[00;`expr \`printf "%u" "'\''$(whoami)"\` % 6 + 31`m\]\u\[\e[m\]\
