@@ -5,6 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Disable the beep
+set -b
+
 set -o vi
 
 alias ls='ls --color=auto'

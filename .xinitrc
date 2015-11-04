@@ -45,5 +45,9 @@ fi
 
 xset +fp /usr/share/fonts/wenquanyi/wqy-microhei-lite/
 
+# silent the beep
+
+xset -b
+
 # window manager
 exec i3
