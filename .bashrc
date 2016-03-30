@@ -23,6 +23,8 @@ export PS1='\
  \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
  '
 
+export EDITOR='/bin/vim'
+
 eval "`dircolors -b $HOME/.dir_colors`"
 
 # TMUX
