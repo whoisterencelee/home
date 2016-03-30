@@ -8,8 +8,7 @@ function! EchoStatus(s)
 endfunction
 
 function! MinifyJS(text)
-  let cleantext1 = system("~/.vim/plugin/jsmin",a:text)
-  let cleantext = substitute(cleantext1, "\n","","g")
+  let cleantext = system("uglifyjs",a:text)
   call writefile([cleantext . ";\r" ],'/tmp/tslimebuffer','b')
   return cleantext
 endfunction
