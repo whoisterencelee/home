@@ -10,10 +10,11 @@
 # $((10+10)) to do integer calculation
 # use only arthematic and loops to do percentage calculations, no floating point calculation
 
-#2014-01-01 make ZSH compatible
-
-prompt off
-PROMPT=\
+#2016-12-07 set based on SHELL
+case $SHELL in
+*/zsh)
+  prompt off
+  PROMPT=\
 $'\e[0;'$(expr $(printf "%u" "'$(whoami)") % 6 + 31)$'m%n \e[0m'\
 $'\e[0;'$(expr $(printf "%u" "'$(hostname)") % 6 + 31)$'m%m \e[0m'\
 "%{$fg[cyan]%}%D{%Y-%m-%d} %{$fg[green]%}%* "\
@@ -21,13 +22,41 @@ $'\e[0;'$(expr $(printf "%u" "'$(hostname)") % 6 + 31)$'m%m \e[0m'\
 `ramexp=\`sed -n "N;s/^MemTotal:\\s*\\([0-9]*\\) .*\\nMemFree:\\s*\\([0-9]*\\) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n "%{$fg[red]%}RAM<$ram%% ";fi`\
 `disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n "%{$fg[red]%}DISK>$disk%%";fi;fi`\
 "%{$fg[white]%}%~/ %{$reset_color%}"
+ ;;
+*/bash)
+  # tested in archlinux
+  export PS1='\
+\[\e[00;`expr \`printf "%u" "'\''$(whoami)"\` % 6 + 31`m\]\u\[\e[m\]\
+ \[\e[00;`expr \`printf "%u" "'\''$(hostname)"\` % 6 + 31`m\]\h\[\e[m\]\
+ \[\e[00;36m\]`date +"%F\[\e[m\]\[\e[00;32m\] %T\[\e[m\]"`\
+`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n " \[\e[00;31m\]LOAD>\`expr $load - 1000\`%\[\e[m\]";fi`\
+`ramexp=\`sed -n "N;s/^MemTotal:\\s*\\([0-9]*\\) .*\\nMemFree:\\s*\\([0-9]*\\) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n " \[\e[00;31m\]RAM<$ram%\[\e[m\]";fi`\
+`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi`\
+ \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
+ '
+ ;;
+*/ash)
+  # testd in openwrt
+  export PS1='\
+\[\e[00;`expr \`printf "%u" "'\''$USER"\` % 6 + 31`m\]\u\[\e[m\]\
+ \[\e[00;`expr \`printf "%u" "'\''$(hostid)"\` % 6 + 31`m\]\h\[\e[m\]\
+ \[\e[00;36m\]`date +"%F\[\e[m\]\[\e[00;32m\] %T\[\e[m\]"`\
+`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n " \[\e[00;31m\]LOAD>\`expr $load - 1000\`%\[\e[m\]";fi`\
+`ramexp=\`sed -rn "N;s/^MemTotal:[[:space:]]*([0-9]*) .*\\nMemFree:[[:space:]]*([0-9]*) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n " \[\e[00;31m\]RAM<$ram%\[\e[m\]";fi`\
+`disk=\`df . | sed -rn "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi`\
+ \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
+ '
+ ;;
+esac
 
-PROMPT=\
-"%{$fg[cyan]%}%D{%Y-%m-%d} %{$fg[green]%}%* "\
-`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n "%{$fg[red]%}LOAD>\`expr $load - 1000\`%% ";fi`\
-`ramexp=\`sed -n "N;s/^MemTotal:\\s*\\([0-9]*\\) .*\\nMemFree:\\s*\\([0-9]*\\) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n "%{$fg[red]%}RAM<$ram%% ";fi`\
-`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n "%{$fg[red]%}DISK>$disk%%";fi;fi`\
-"%{$fg[white]%}%~/ %{$reset_color%}"
+#2014-01-01 make ZSH compatible
+
+#  PS1=\
+#"%{$fg[cyan]%}%D{%Y-%m-%d} %{$fg[green]%}%* "\
+#`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n "%{$fg[red]%}LOAD>\`expr $load - 1000\`%% ";fi`\
+#`ramexp=\`sed -n "N;s/^MemTotal:\\s*\\([0-9]*\\) .*\\nMemFree:\\s*\\([0-9]*\\) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n "%{$fg[red]%}RAM<$ram%% ";fi`\
+#`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n "%{$fg[red]%}DISK>$disk%%";fi;fi`\
+#"%{$fg[white]%}%~/ %{$reset_color%}"
 
 #2013-12-31 use single quote ` to execute statements as bash doesn't allow nested $($())
 #2013-12-31 use expr instead of $[] or $(()) to be more backward compatible with sh
