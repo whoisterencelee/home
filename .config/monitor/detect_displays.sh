@@ -13,7 +13,7 @@ declare -A POS
 POS=([X]=0 [Y]=0)
 
 find_mode() {
-  echo $(${XRANDR} |grep ${1} -A1|awk '{FS="[ x]"} /^\s/{printf("WIDTH=%s\nHEIGHT=%s", $4,$5)}')
+  echo $(${XRANDR} | awk '/${1} /;/^ /{FS="[ x]"} /^\s/{printf("WIDTH=%s\nHEIGHT=%s\nRATE=%s\n", $4,$5,$6)}' | tail -3)
 }
 
 xrandr_params_for() {
