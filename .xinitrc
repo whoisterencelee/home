@@ -28,8 +28,7 @@ if [ -f "$usermodmap" ]; then
 fi
 
 if [ -f "$HOME/.config/monitor/this_monitor.sh" ]; then
-	srandrd $HOME/.config/monitor/detect_displays.sh
-#	$HOME/.config/monitor/this_monitor.sh
+	$HOME/.config/monitor/this_monitor.sh
 fi
 
 # start some nice programs
