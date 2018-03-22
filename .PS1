@@ -43,7 +43,7 @@ $'\e[0;'$(expr $(printf "%u" "'$(hostname)") % 6 + 31)$'m%m \e[0m'\
  \[\e[00;36m\]`date +"%F\[\e[m\]\[\e[00;32m\] %T\[\e[m\]"`\
 `load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n " \[\e[00;31m\]LOAD>\`expr $load - 1000\`%\[\e[m\]";fi`\
 `ramexp=\`sed -rn "N;s/^MemTotal:[[:space:]]*([0-9]*) .*\\nMemFree:[[:space:]]*([0-9]*) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n " \[\e[00;31m\]RAM<$ram%\[\e[m\]";fi`\
-`disk=\`df . | sed -rn "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi`\
+`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi`\
  \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
  '
  ;;
