@@ -19,6 +19,11 @@ export EDITOR='/bin/vim'
 
 eval "`dircolors -b $HOME/.dir_colors`"
 
+# virtualenv and virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+source /usr/bin/virtualenvwrapper.sh
+
 # TMUX
 if `which tmux 2>&1 >/dev/null` && [ -z $TMUX ] ; then
 # check if tmux is on system
