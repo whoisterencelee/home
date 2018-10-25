@@ -15,6 +15,8 @@ alias l='ls --color=auto -alrt'
 
 source .PS1
 
+source ~/.config/bookmarks/bookmarks.sh
+
 export EDITOR='/bin/vim'
 
 eval "`dircolors -b $HOME/.dir_colors`"
