@@ -21,10 +21,22 @@ export EDITOR='/bin/vim'
 
 eval "`dircolors -b $HOME/.dir_colors`"
 
+<<<<<<< HEAD
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 source /usr/bin/virtualenvwrapper.sh
+=======
+# append to the history file, don't overwrite it
+shopt -s histappend
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+>>>>>>> refs/remotes/origin/master
 
 # TMUX
 if `which tmux 2>&1 >/dev/null` && [ -z $TMUX ] ; then

@@ -1,2 +1,3 @@
 .ssh/
 .virtualenvs/
+.vim/.netrwhist

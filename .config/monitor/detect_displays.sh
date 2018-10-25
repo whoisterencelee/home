@@ -1,37 +1,35 @@
-#!/bin/bash
-# require AUR srandrd package
+#!/bin/sh
 
 XRANDR="xrandr"
-CMD="${XRANDR}"
-declare -A VOUTS
-eval VOUTS=$(${XRANDR}|awk 'BEGIN {printf("(")} /^\S.*connected/{printf("[%s]=%s ", $1, $2)} END{printf(")")}')
-declare -A POS
+
+VOUTS=$(${XRANDR}|awk 'BEGIN {printf("(")} /^\S.*connected/{printf("[%s]=%s ", $1, $2)} END{printf(")")}')
+
 #XPOS=0
 #YPOS=0
 #POS="${XPOS}x${YPOS}"
 
 POS=([X]=0 [Y]=0)
 
-find_mode() {
-  echo $(${XRANDR} | awk '/${1} /;/^ /{FS="[ x]"} /^\s/{printf("WIDTH=%s\nHEIGHT=%s\nRATE=%s\n", $4,$5,$6)}' | tail -3)
-}
-
 xrandr_params_for() {
   if [ "${2}" == 'connected' ]
   then
-    eval $(find_mode ${1})  #sets ${WIDTH} and ${HEIGHT}
-    MODE="${WIDTH}x${HEIGHT}"
-    CMD="${CMD} --output ${1} --mode ${MODE} --pos ${POS[X]}x${POS[Y]}"
-    POS[X]=$((${POS[X]}+${WIDTH}))
+
+    MODE= ${XRANDR} | sed -n '/^'${1}' /,/^[^ ]/p' | sed -n '/^ /p' | sort -n | tail -n 1 | sed -e 's/   \(.*\)  .*/\1/g'
+
+    echo MODE is ${MODE}
+    #CMD="${XRANDR} --output ${1} --mode ${MODE} --pos ${POS[X]}x${POS[Y]}"
+    CMD="${XRANDR} --output ${1} --mode $MODE"
+    echo CMD is ${CMD}
     return 0
   else
-    CMD="${CMD} --output ${1} --off"
+    CMD="${XRANDR} --output ${1} --off"
     return 1
   fi
 }
 
 for VOUT in ${!VOUTS[*]}
 do
+  echo ${VOUT}
   xrandr_params_for ${VOUT} ${VOUTS[${VOUT}]}
 done
 set -x
