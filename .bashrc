@@ -15,6 +15,9 @@ alias l='ls --color=auto -alrt'
 
 source .PS1
 
+# ignore space leading password command lines
+HISTCONTROL=ignorespace
+
 source ~/.config/bookmarks/bookmarks.sh
 
 export EDITOR='/bin/vim'
