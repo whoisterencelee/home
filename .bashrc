@@ -10,29 +10,50 @@ set -b
 
 set -o vi
 
-alias ls='ls --color=auto'
-alias l='ls --color=auto -alrt'
-
 source .PS1
 
-# ignore space leading password command lines
-HISTCONTROL=ignorespace
+alias ls='ls --color=auto'
+alias l='ls --color=auto -alrt'
+eval "`dircolors -b $HOME/.dir_colors`"
 
 source ~/.config/bookmarks/bookmarks.sh
 
 export EDITOR='/bin/vim'
 
-eval "`dircolors -b $HOME/.dir_colors`"
+# append to the history file, don't overwrite it
+shopt -s histappend
+HISTSIZE=1000
+HISTFILESIZE=2000
+# ignore space leading password command lines
+HISTCONTROL=ignorespace
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
 
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 source /usr/bin/virtualenvwrapper.sh
 
+
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f $HOME/serverless/node_modules/tabtab/.completions/serverless.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/serverless.bash
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f $HOME/serverless/node_modules/tabtab/.completions/sls.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/sls.bash
+# tabtab source for slss package
+# uninstall by removing these lines or running `tabtab uninstall slss`
+[ -f $HOME/serverless/node_modules/tabtab/.completions/slss.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/slss.bash
+
 
 # TMUX
 if `which tmux 2>&1 >/dev/null` && [ -z $TMUX ] ; then
@@ -59,13 +80,3 @@ if `which tmux 2>&1 >/dev/null` && [ -z $TMUX ] ; then
 	#done
 
 fi
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[ -f /home/terence/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /home/terence/serverless/node_modules/tabtab/.completions/serverless.bash
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[ -f /home/terence/serverless/node_modules/tabtab/.completions/sls.bash ] && . /home/terence/serverless/node_modules/tabtab/.completions/sls.bash
-# tabtab source for slss package
-# uninstall by removing these lines or running `tabtab uninstall slss`
-[ -f /home/terence/serverless/node_modules/tabtab/.completions/slss.bash ] && . /home/terence/serverless/node_modules/tabtab/.completions/slss.bash
