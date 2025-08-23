@@ -1,4 +1,4 @@
-# dependencies echo, expr, printf, whoami, hostname, date, df, sed, /proc/meminfo and /proc/loadavg, these are very based for POSIX systems should be available everywhere
+# dependencies echo, expr, printf, whoami, /etc/hostname, date, df, sed, /proc/meminfo and /proc/loadavg, these are very basic for POSIX systems should be available everywhere
 
 # used ideas:
 # use only 8 colours-black = 7, 31,32,33,34,35,36,37
@@ -10,13 +10,13 @@
 # $((10+10)) to do integer calculation
 # use only arthematic and loops to do percentage calculations, no floating point calculation
 
-#2017-06-20 set based on $0 which is more stable than $SHELL
+#2025-08-23 remove need for hostname command, just read from file directly
 case $0 in
 */zsh|-zsh)
   prompt off
   PROMPT=\
 $'\e[0;'$(expr $(printf "%u" "'$(whoami)") % 6 + 31)$'m%n \e[0m'\
-$'\e[0;'$(expr $(printf "%u" "'$(hostname)") % 6 + 31)$'m%m \e[0m'\
+$'\e[0;'$(expr $(printf "%u" "'$(echo $(</etc/hostname))") % 6 + 31)$'m%m \e[0m'\
 "%{$fg[cyan]%}%D{%Y-%m-%d} %{$fg[green]%}%* "\
 `load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n "%{$fg[red]%}LOAD>\`expr $load - 1000\`%% ";fi`\
 `ramexp=\`sed -n "N;s/^MemTotal:[[:space:]]*\\([0-9]*\\) .*\\nMemFree:[[:space:]]*\\([0-9]*\\) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n "%{$fg[red]%}RAM<$ram%% ";fi`\
@@ -43,7 +43,7 @@ $'\e[0;'$(expr $(printf "%u" "'$(hostname)") % 6 + 31)$'m%m \e[0m'\
   # tested in archlinux
   export PS1='\
 \[\e[00;`expr \`printf "%u" "'\''$(whoami)"\` % 6 + 31`m\]\u\[\e[m\]\
- \[\e[00;`expr \`printf "%u" "'\''$(hostname)"\` % 6 + 31`m\]\h\[\e[m\]\
+ \[\e[00;`expr \`printf "%u" "'\''$(echo $(</etc/hostname))"\` % 6 + 31`m\]\h\[\e[m\]\
  \[\e[00;36m\]`date +"%F\[\e[m\]\[\e[00;32m\] %T\[\e[m\]"`\
 `load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n " \[\e[00;31m\]LOAD>\`expr $load - 1000\`%\[\e[m\]";fi`\
 `ramexp=\`sed -rn "N;s/^MemTotal:[[:space:]]*([0-9]*) .*\\nMemFree:[[:space:]]*([0-9]*) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n " \[\e[00;31m\]RAM<$ram%\[\e[m\]";fi`\
@@ -68,6 +68,67 @@ $'\e[0;'$(expr $(printf "%u" "'$(hostname)") % 6 + 31)$'m%m \e[0m'\
 *)
   export PS1='>'
 esac
+
+#Previous Versions
+
+#2017-06-20 set based on $0 which is more stable than $SHELL
+#case $0 in
+#*/zsh|-zsh)
+#  prompt off
+#  PROMPT=\
+#$'\e[0;'$(expr $(printf "%u" "'$(whoami)") % 6 + 31)$'m%n \e[0m'\
+#$'\e[0;'$(expr $(printf "%u" "'$(hostname)") % 6 + 31)$'m%m \e[0m'\
+#"%{$fg[cyan]%}%D{%Y-%m-%d} %{$fg[green]%}%* "\
+#`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n "%{$fg[red]%}LOAD>\`expr $load - 1000\`%% ";fi`\
+#`ramexp=\`sed -n "N;s/^MemTotal:[[:space:]]*\\([0-9]*\\) .*\\nMemFree:[[:space:]]*\\([0-9]*\\) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n "%{$fg[red]%}RAM<$ram%% ";fi`\
+#`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n "%{$fg[red]%}DISK>$disk%%";fi;fi`\
+#"%{$fg[white]%}%~/ %{$reset_color%}"
+# ;;
+#*/bash|-bash)
+#  if command -v getprop >/dev/null 2>&1;then
+#
+#  # tested in termux busybox
+#  export androidname=$(getprop net.hostname)
+#  export PS1='\
+#\[\e[00;`expr \`printf "%u" "'\''$(whoami)"\` % 6 + 31`m\]\u\[\e[m\]\
+# \[\e[00;`expr \`printf "%u" "'\''$androidname"\` % 6 + 31`m\]$androidname\[\e[m\]\
+# \[\e[00;36m\]`date +"%F\[\e[m\]\[\e[00;32m\] %T\[\e[m\]"`\
+#`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n " \[\e[00;31m\]LOAD>\`expr $load - 1000\`%\[\e[m\]";fi`\
+#`ramexp=\`sed -rn "N;s/^MemTotal:[[:space:]]*([0-9]*) .*\\nMemFree:[[:space:]]*([0-9]*) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n " \[\e[00;31m\]RAM<$ram%\[\e[m\]";fi`\
+#`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi`\
+# \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
+# '
+#
+#  else
+#
+#  # tested in archlinux
+#  export PS1='\
+#\[\e[00;`expr \`printf "%u" "'\''$(whoami)"\` % 6 + 31`m\]\u\[\e[m\]\
+# \[\e[00;`expr \`printf "%u" "'\''$(hostname)"\` % 6 + 31`m\]\h\[\e[m\]\
+# \[\e[00;36m\]`date +"%F\[\e[m\]\[\e[00;32m\] %T\[\e[m\]"`\
+#`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n " \[\e[00;31m\]LOAD>\`expr $load - 1000\`%\[\e[m\]";fi`\
+#`ramexp=\`sed -rn "N;s/^MemTotal:[[:space:]]*([0-9]*) .*\\nMemFree:[[:space:]]*([0-9]*) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n " \[\e[00;31m\]RAM<$ram%\[\e[m\]";fi`\
+#`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi`\
+# \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
+# '
+#
+# fi
+# ;;
+#*/ash|-ash)
+#  # tested in openwrt
+#  export PS1='\
+#\[\e[00;`expr \`printf "%u" "'\''$USER"\` % 6 + 31`m\]\u\[\e[m\]\
+# \[\e[00;`expr \`printf "%u" "'\''$(hostid)"\` % 6 + 31`m\]\h\[\e[m\]\
+# \[\e[00;36m\]`date +"%F\[\e[m\]\[\e[00;32m\] %T\[\e[m\]"`\
+#`load=\`sed "s/\([0-9]*\)[.]\([0-9]*\).*/1\1\2/" /proc/loadavg\`;if [[ $load -gt 1090 ]];then echo -n " \[\e[00;31m\]LOAD>\`expr $load - 1000\`%\[\e[m\]";fi`\
+#`ramexp=\`sed -rn "N;s/^MemTotal:[[:space:]]*([0-9]*) .*\\nMemFree:[[:space:]]*([0-9]*) .*/\\200 \\/ \\1/p" /proc/meminfo\`;ram=\`expr $ramexp\`;if [[ $ram -lt 10 ]];then echo -n " \[\e[00;31m\]RAM<$ram%\[\e[m\]";fi`\
+#`disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi`\
+# \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
+# '
+# ;;
+#*)
+#  export PS1='>'
+#esac
 
 #2016-12-07 set based on SHELL
 #case $SHELL in
@@ -169,8 +230,6 @@ esac
 #$(disk=$(df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p");if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n " \[\e[00;31m\]DISK>$disk%\[\e[m\]";fi;fi)\
 # \[\e[00;$(if [[ ! -w $PWD ]];then echo -n 31;fi)m\]\w/\[\e[m\]\
 # '
-
-#Previous Verions
 
 #2013-03-08 change CPU to LOAD which is more accurate as it's not just CPU but IO waits as well
 #PS1='\
