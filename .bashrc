@@ -18,7 +18,7 @@ eval "`dircolors -b $HOME/.dir_colors`"
 
 source ~/.config/bookmarks/bookmarks.sh
 
-export EDITOR='/bin/vim'
+export EDITOR='/usr/bin/nvim'
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -33,26 +33,26 @@ shopt -s checkwinsize
 
 
 # virtualenv and virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-source /usr/bin/virtualenvwrapper.sh
+#export WORKON_HOME=$HOME/.virtualenvs
+#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+#source /usr/bin/virtualenvwrapper.sh
 
 
 # nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
-[ -f $HOME/serverless/node_modules/tabtab/.completions/serverless.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/serverless.bash
+#[ -f $HOME/serverless/node_modules/tabtab/.completions/serverless.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/serverless.bash
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
-[ -f $HOME/serverless/node_modules/tabtab/.completions/sls.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/sls.bash
+#[ -f $HOME/serverless/node_modules/tabtab/.completions/sls.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/sls.bash
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
-[ -f $HOME/serverless/node_modules/tabtab/.completions/slss.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/slss.bash
+#[ -f $HOME/serverless/node_modules/tabtab/.completions/slss.bash ] && . $HOME/serverless/node_modules/tabtab/.completions/slss.bash
 
 
 # TMUX
