@@ -1,6 +1,6 @@
 " Tslime.vim. Send portion of buffer to tmux instance
 " Maintainer: C.Coutinho <kikijump [at] gmail [dot] com>
-" Licence:    DWTFYWTPL
+" Modified:   Added filetype-specific prefixes and suffixes
 
 if exists("g:loaded_tslime") && g:loaded_tslime
   finish
@@ -8,38 +8,103 @@ endif
 
 let g:loaded_tslime = 1
 
+" Filetype-specific prefixes and suffixes for REPL environments
+let g:tslime_filetype_prefixes = {
+      \ 'javascript': '.editor',
+      \ 'python':     '',
+      \ 'ruby':       '',
+      \ 'sh':         '',
+      \ 'zsh':        '',
+      \ 'bash':       '',
+      \ 'lua':        '',
+      \ 'vim':        '',
+      \ 'sql':        '',
+      \ 'rust':       '',
+      \ 'go':         '',
+      \ 'java':       '',
+      \ 'c':          '',
+      \ 'cpp':        '',
+      \ 'php':        '',
+      \ 'r':          '',
+      \ 'haskell':    ':{\|',
+      \ 'clojure':    '',
+      \ 'elixir':     '',
+      \ 'scala':      ':paste',
+      \ 'julia':      '',
+      \ }
+
+let g:tslime_filetype_suffixes = {
+      \ 'javascript': "\<C-d>",
+      \ 'python':     "\<CR>",
+      \ 'ruby':       "\<C-d>",
+      \ 'sh':         "\<C-d>",
+      \ 'zsh':        "\<C-d>",
+      \ 'bash':       "\<C-d>",
+      \ 'lua':        "\<C-d>",
+      \ 'vim':        "\<CR>",
+      \ 'sql':        ";\<CR>",
+      \ 'rust':       "\<C-d>",
+      \ 'go':         "\<C-d>",
+      \ 'java':       "\<C-d>",
+      \ 'c':          "\<C-d>",
+      \ 'cpp':        "\<C-d>",
+      \ 'php':        "\<C-d>",
+      \ 'r':          "\<CR>",
+      \ 'haskell':    "\<CR>:}\<CR>",
+      \ 'clojure':    "\<CR>",
+      \ 'elixir':     "\<C-c>\<C-c>",
+      \ 'scala':      "\<C-d>",
+      \ 'julia':      "\<C-d>",
+      \ }
+
+" Default prefix and suffix if filetype not found
+let g:tslime_default_prefix = ''
+let g:tslime_default_suffix = "\<CR>"
+
 " Function to send keys to tmux
-" useful if you want to stop some command with <c-c> in tmux.
 function! Send_keys_to_Tmux(keys)
   if !exists("g:tslime")
     call <SID>Tmux_Vars()
   endif
 
-  call system("tmux set-buffer -b uglified " . a:keys)
-  call system("tmux paste-buffer -b uglified -t " . s:tmux_target() )
+  call system("tmux set-buffer -b tslime_buffer " . shellescape(a:keys))
+  call system("tmux paste-buffer -b tslime_buffer -t " . s:tmux_target() )
 endfunction
 
 " Main function.
-" Use it in your script if you want to send text to a tmux session.
 function! Send_to_Tmux(text)
-  call Send_keys_to_Tmux('"'.escape(a:text, '\"$`').'"')
+  call Send_keys_to_Tmux( a:text )
+  "   call Send_keys_to_Tmux('"'.escape(a:text, '\"$`').'"')
 endfunction
 
 function! s:tmux_target()
   return '"' . g:tslime['session'] . '":' . g:tslime['window'] . "." . g:tslime['pane']
 endfunction
 
-function! s:set_tmux_buffer(text)
-  let buf = substitute(a:text, "'", "\\'", 'g')
-  call system("tmux load-buffer -", buf)
-endfunction
-
-function! Uglify(text)
-  return system('babel --no-babelrc --no-comments --minified ',a:text) 
+function! AddPrefixSuffix(text)
+  let ft = &filetype
+  let prefix = get(g:tslime_filetype_prefixes, ft, g:tslime_default_prefix)
+  let suffix = get(g:tslime_filetype_suffixes, ft, g:tslime_default_suffix)
+  
+  " For languages that need special handling
+  if ft == 'haskell'
+    " Haskell needs special multi-line handling
+    let result = prefix . a:text . suffix
+  elseif ft == 'scala'
+    " Scala paste mode
+    let result = prefix . "\n" . a:text . suffix
+  elseif prefix != ''
+    let result = prefix . "\n" . a:text . suffix
+  else
+    let result = a:text . suffix
+  endif
+  
+  return result
 endfunction
 
 function! SendToTmux(text)
-  call Send_to_Tmux(Uglify(a:text))
+  let processed_text = AddPrefixSuffix(a:text)
+  call Send_to_Tmux(processed_text)
 endfunction
 
 " Session completion
@@ -138,5 +203,5 @@ command! -nargs=* Tmux call Send_to_Tmux('<Args><CR>')
 vmap <C-c><C-c> <Plug>SendSelectionToTmux
 vmap <C-c>t "ry :echo Send_to_Tmux(@r)<CR>
 nmap <C-c><C-c> <Plug>NormalModeSendToTmux
-nmap <C-c>t vip "ry :echo Sent_to_Tmux(@r)<CR>
+nmap <C-c>t vip "ry :echo Send_to_Tmux(@r)<CR>
 nmap <C-c>s <Plug>SetTmuxVars
