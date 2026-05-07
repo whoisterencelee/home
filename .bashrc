@@ -21,6 +21,10 @@ source ~/.config/bookmarks/bookmarks.sh
 export EDITOR='/usr/bin/nvim'
 export PYTHON_BASIC_REPL=1
 
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+source ~/.llm
+
 # append to the history file, don't overwrite it
 shopt -s histappend
 HISTSIZE=1000
