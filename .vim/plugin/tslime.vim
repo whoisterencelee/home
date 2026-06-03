@@ -10,27 +10,27 @@ let g:loaded_tslime = 1
 
 " Filetype-specific prefixes and suffixes for REPL environments
 let g:tslime_filetype_prefixes = {
-      \ 'javascript': '.editor',
-      \ 'python':     '',
-      \ 'ruby':       '',
-      \ 'sh':         '',
-      \ 'zsh':        '',
-      \ 'bash':       '',
-      \ 'lua':        '',
-      \ 'vim':        '',
-      \ 'sql':        '',
-      \ 'rust':       '',
-      \ 'go':         '',
-      \ 'java':       '',
-      \ 'c':          '',
-      \ 'cpp':        '',
-      \ 'php':        '',
-      \ 'r':          '',
+      \ 'javascript': '\<CR>.editor',
+      \ 'python':     '\<CR>',
+      \ 'ruby':       '\<CR>',
+      \ 'sh':         '\<CR>',
+      \ 'zsh':        '\<CR>',
+      \ 'bash':       '\<CR>',
+      \ 'lua':        '\<CR>',
+      \ 'vim':        '\<CR>',
+      \ 'sql':        '\<CR>',
+      \ 'rust':       '\<CR>',
+      \ 'go':         '\<CR>',
+      \ 'java':       '\<CR>',
+      \ 'c':          '\<CR>',
+      \ 'cpp':        '\<CR>',
+      \ 'php':        '\<CR>',
+      \ 'r':          '\<CR>',
       \ 'haskell':    ':{\|',
-      \ 'clojure':    '',
-      \ 'elixir':     '',
+      \ 'clojure':    '\<CR>',
+      \ 'elixir':     '\<CR>',
       \ 'scala':      ':paste',
-      \ 'julia':      '',
+      \ 'julia':      '\<CR>',
       \ }
 
 let g:tslime_filetype_suffixes = {
@@ -58,7 +58,7 @@ let g:tslime_filetype_suffixes = {
       \ }
 
 " Default prefix and suffix if filetype not found
-let g:tslime_default_prefix = ''
+let g:tslime_default_prefix = "\<CR>"
 let g:tslime_default_suffix = "\<CR>"
 
 " Function to send keys to tmux
