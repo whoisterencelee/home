@@ -10,27 +10,27 @@ let g:loaded_tslime = 1
 
 " Filetype-specific prefixes and suffixes for REPL environments
 let g:tslime_filetype_prefixes = {
-      \ 'javascript': '\<CR>.editor',
-      \ 'python':     '\<CR>',
-      \ 'ruby':       '\<CR>',
-      \ 'sh':         '\<CR>',
-      \ 'zsh':        '\<CR>',
-      \ 'bash':       '\<CR>',
-      \ 'lua':        '\<CR>',
-      \ 'vim':        '\<CR>',
-      \ 'sql':        '\<CR>',
-      \ 'rust':       '\<CR>',
-      \ 'go':         '\<CR>',
-      \ 'java':       '\<CR>',
-      \ 'c':          '\<CR>',
-      \ 'cpp':        '\<CR>',
-      \ 'php':        '\<CR>',
-      \ 'r':          '\<CR>',
-      \ 'haskell':    ':{\|',
-      \ 'clojure':    '\<CR>',
-      \ 'elixir':     '\<CR>',
-      \ 'scala':      ':paste',
-      \ 'julia':      '\<CR>',
+      \ 'javascript': "\<CR>.editor",
+      \ 'python':     "\<CR>",
+      \ 'ruby':       "\<CR>",
+      \ 'sh':         "\<CR>",
+      \ 'zsh':        "\<CR>",
+      \ 'bash':       "\<CR>",
+      \ 'lua':        "\<CR>",
+      \ 'vim':        "\<CR>",
+      \ 'sql':        "\<CR>",
+      \ 'rust':       "\<CR>",
+      \ 'go':         "\<CR>",
+      \ 'java':       "\<CR>",
+      \ 'c':          "\<CR>",
+      \ 'cpp':        "\<CR>",
+      \ 'php':        "\<CR>",
+      \ 'r':          "\<CR>",
+      \ 'haskell':    ":{\|",
+      \ 'clojure':    "\<CR>",
+      \ 'elixir':     "\<CR>",
+      \ 'scala':      ":paste",
+      \ 'julia':      "\<CR>",
       \ }
 
 let g:tslime_filetype_suffixes = {
@@ -68,7 +68,7 @@ function! Send_keys_to_Tmux(keys)
   endif
 
   call system("tmux set-buffer -b tslime_buffer " . shellescape(a:keys))
-  call system("tmux paste-buffer -b tslime_buffer -t " . s:tmux_target() )
+  call system("tmux paste-buffer -p -b tslime_buffer -t " . s:tmux_target() )
 endfunction
 
 " Main function.
