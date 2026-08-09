@@ -61,7 +61,7 @@ shopt -s checkwinsize
 
 
 # TMUX
-if `which tmux 2>&1 >/dev/null` && [ -z $TMUX ] ; then
+if `command -v tmux 2>&1 >/dev/null` && [ -z $TMUX ] ; then
 # check if tmux is on system
 # tmux doesn't nest nicely, check $TMUX which is only set within the tmux session
 
