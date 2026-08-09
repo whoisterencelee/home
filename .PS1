@@ -12,7 +12,7 @@
 
 #2025-08-23 remove need for hostname command, just read from file directly
 case $0 in
-*/zsh|-zsh)
+*/zsh|-zsh|zsh)
   prompt off
   PROMPT=\
 $'\e[0;'$(expr $(printf "%u" "'$(whoami)") % 6 + 31)$'m%n \e[0m'\
@@ -23,7 +23,7 @@ $'\e[0;'$(expr $(printf "%u" "'$(echo $(</etc/hostname))") % 6 + 31)$'m%m \e[0m'
 `disk=\`df . | sed -n "s/.* \([1-9]*[0-9]\)%.*/\1/p"\`;if [ $disk ];then if [[ $disk -gt 87 ]];then echo -n "%{$fg[red]%}DISK>$disk%%";fi;fi`\
 "%{$fg[white]%}%~/ %{$reset_color%}"
  ;;
-*/bash|-bash)
+*/bash|-bash|bash)
   if command -v getprop >/dev/null 2>&1;then
 
   # tested in termux busybox
@@ -53,7 +53,7 @@ $'\e[0;'$(expr $(printf "%u" "'$(echo $(</etc/hostname))") % 6 + 31)$'m%m \e[0m'
 
  fi
  ;;
-*/ash|-ash)
+*/ash|-ash|ash)
   # tested in openwrt
   export PS1='\
 \[\e[00;`expr \`printf "%u" "'\''$USER"\` % 6 + 31`m\]\u\[\e[m\]\
@@ -66,7 +66,8 @@ $'\e[0;'$(expr $(printf "%u" "'$(echo $(</etc/hostname))") % 6 + 31)$'m%m \e[0m'
  '
  ;;
 *)
-  export PS1='>'
+  # show atleast a prompt
+  export PS1='> '
 esac
 
 #Previous Versions
