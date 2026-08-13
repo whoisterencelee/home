@@ -151,7 +151,7 @@ URxvt*thickness: 3
 ! URxvt*skipBuiltinGlyphs: boolean
 
 ! Specifies the terminal type name to be set in the TERM environment variable; option -tn.
-URxvt*termName: screen-256color
+!URxvt*termName: screen-256color
 
 ! Specifies number of lines (pixel height) to insert between each row of the display [default
 ! URxvt*lineSpace: number

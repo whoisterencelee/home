@@ -16,6 +16,8 @@ alias ls='ls --color=auto'
 alias l='ls --color=auto -alrt'
 eval "`dircolors -b $HOME/.dir_colors`"
 
+alias ssh='TERM=screen-256color ssh'
+
 source ~/.config/bookmarks/bookmarks.sh
 
 export EDITOR='/usr/bin/nvim'
